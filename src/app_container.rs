@@ -6,14 +6,12 @@ use glutin_window::GlutinWindow;
 use piston::window::WindowSettings;
 use piston::event_loop::*;
 use piston::input::*;
-use graphics::*;
 use crate::app_config::*;
 
 /// A utility struct for running an android application, to not have to worry about the minor
 /// android-specific details when running and rendering an app with piston
 pub struct AppContainer<T: AppImpl> {
     event_reciever: std::sync::mpsc::Receiver<android_glue::Event>,
-    focus: bool,
     gl: GlGraphics,
     window: GlutinWindow,
     app: T,
@@ -46,7 +44,6 @@ impl<T: AppImpl> AppContainer<T> {
         Self {
             event_reciever: receiver,
             window: android_window,
-            focus: true,
             gl: GlGraphics::new(opengles_graphics::OpenGL::V3_1),
             app,
             events: Events::new(EventSettings::new()),
@@ -97,7 +94,6 @@ impl<T: AppImpl> AppContainer<T> {
     /// calling `self.events.next()` which at some point tries to swap buffers crashing egl -- it's ugly
     fn wait_until_gain_focus(&mut self) {
         use android_glue::Event;
-        use std::sync::mpsc::RecvError;
         use std::sync::mpsc::TryRecvError;
         loop{
             let recieved = self.event_reciever.recv();
@@ -117,7 +113,6 @@ impl<T: AppImpl> AppContainer<T> {
     /// Tries to recieve android events, and manages focus changes
     fn poll_android_events(&mut self) {
         use android_glue::Event;
-        use std::sync::mpsc::*;
         let mut flag = false;
         for event in self.event_reciever.try_iter(){
             match event {
@@ -143,7 +138,7 @@ impl<T: AppImpl> AppContainer<T> {
             self.app.reset_on_start();
         }
         if let Some(x) = self.config.num_frames {
-            'a: for i in 0..x {
+            'a: for _ in 0..x {
                 while !self.app.cancel_poll() {
                     if self.poll_event_loop() {
                         continue 'a;
