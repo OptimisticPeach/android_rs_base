@@ -1,5 +1,5 @@
 # android_base
-__- A base to create android applications with ease__
+__- A base to create android applications with ease__  
 `android_base` provides an api to develop applications in rust for android without worrying about android specific details like opengl implementations or the event loop, all while having its exposed functions be very abstract in terms of what you can do
 ## example
 This is basically the same example as shown in the [piston getting started page](https://github.com/PistonDevelopers/Piston-Tutorials/tree/master/getting-started), except with inverted colours.
