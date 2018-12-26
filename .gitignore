@@ -1,0 +1,33 @@
+/target
+**/*.rs.bk
+**/*Cargo.lock
+
+#all the files that opengles_graphics suggest we don't keep
+.DS_Store
+*~
+*#
+*.o
+*.so
+*.swp
+*.dylib
+*.dSYM
+*.dll
+*.rlib
+*.dummy
+*.exe
+*-test
+/bin/main
+/bin/test-internal
+/bin/test-external
+/doc/
+/target/
+/build/
+/.rust/
+rusti.sh
+watch.sh
+/examples/**
+!/examples/*.rs
+!/examples/assets/
+
+#generated on build
+/opengles_graphics/src/gl.rs
